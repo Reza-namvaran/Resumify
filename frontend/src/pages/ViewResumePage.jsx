@@ -33,9 +33,9 @@ export default function ViewResumePage() {
           />
         )}
         <div>
-          <h1 className="text-3xl font-bold">{personalInfo.name || "Unnamed"}</h1>
+          <h1 className="text-3xl font-bold text-gray-600">{personalInfo.name || "Unnamed"}</h1>
           <p className="text-gray-600">{personalInfo.jobTitle}</p>
-          <p className="mt-2">{personalInfo.bio}</p>
+          <p className="mt-2 text-gray-600">{personalInfo.bio}</p>
           <div className="mt-2 text-sm text-gray-500 space-x-4">
             {personalInfo.contact.email && <span>📧 {personalInfo.contact.email}</span>}
             {personalInfo.contact.phone && <span>📱 {personalInfo.contact.phone}</span>}
@@ -51,11 +51,11 @@ export default function ViewResumePage() {
 
       {/* Skills */}
       <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Skills</h2>
+        <h2 className="text-xl font-semibold mb-2 text-gray-600">Skills</h2>
         {skills.length === 0 ? (
           <p className="text-gray-500">No skills listed.</p>
         ) : (
-          <ul className="list-disc pl-5">
+          <ul className="list-disc pl-5 text-gray-600">
             {skills.map((s, i) => (
               <li key={i}>{s.name} {s.level && `- ${s.level}`}</li>
             ))}
@@ -65,14 +65,14 @@ export default function ViewResumePage() {
 
       {/* Education */}
       <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Education</h2>
+        <h2 className="text-xl font-semibold mb-2 text-gray-600">Education</h2>
         {education.length === 0 ? (
           <p className="text-gray-500">No education history.</p>
         ) : (
           education.map((edu, i) => (
             <div key={i} className="mb-3">
-              <p className="font-semibold">{edu.school}</p>
-              <p className="text-sm">{edu.major} ({edu.start} - {edu.end})</p>
+              <p className="font-semibold text-gray-600">{edu.school}</p>
+              <p className="text-sm text-gray-600">{edu.major} ({edu.start} - {edu.end})</p>
               <p className="text-gray-600">{edu.description}</p>
             </div>
           ))
@@ -80,7 +80,7 @@ export default function ViewResumePage() {
       </section>
 
       {/* Experience */}
-      <section className="mb-6">
+      <section className="mb-6 text-gray-600">
         <h2 className="text-xl font-semibold mb-2">Experience / Projects</h2>
         {experience.length === 0 ? (
           <p className="text-gray-500">No experience listed.</p>
@@ -100,7 +100,7 @@ export default function ViewResumePage() {
       </section>
 
       {/* Certificates */}
-      <section className="mb-6">
+      <section className="mb-6 text-gray-600">
         <h2 className="text-xl font-semibold mb-2">Certificates</h2>
         {certificates.length === 0 ? (
           <p className="text-gray-500">No certificates listed.</p>
@@ -120,7 +120,7 @@ export default function ViewResumePage() {
       </section>
 
       {/* Hobbies */}
-      <section>
+      <section className="text-gray-600">
         <h2 className="text-xl font-semibold mb-2">Hobbies / Interests</h2>
         {hobbies.length === 0 ? (
           <p className="text-gray-500">No hobbies listed.</p>
@@ -135,8 +135,8 @@ export default function ViewResumePage() {
 
       {/* Back & Edit */}
       <div className="mt-6 flex gap-4">
-        <Link to="/" className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Back</Link>
-        <Link to={`/edit/${id}`} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <Link to="/" className="px-4 py-2 bg-gray-300 !text-gray-800 rounded !hover:bg-gray-400">Back</Link>
+        <Link to={`/edit/${id}`} className="px-4 py-2 bg-blue-600 !text-white rounded !hover:bg-blue-700">
           Edit Resume
         </Link>
       </div>
