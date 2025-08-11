@@ -1,5 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useResumes } from '../hooks/useResumes';
+import ResumeList from '../components/ResumeList';
 
 export default function HomePage() {
-  return <h1 className="text-2xl font-semibold">Home Page - List of Resumes</h1>;
+  const { resumes, create, remove } = useResumes();
+  const navigate = useNavigate();
+
+  const handleCreate = async () => {
+    const newResume = await create();
+    navigate(`/edit/${newResume.id}`);
+  };
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-4 text-stone-700">Your Resumes</h1>
+      <button
+        onClick={handleCreate}
+        className="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:!bg-green-600"
+      >
+        Create New Resume
+      </button>
+      <ResumeList resumes={resumes} onDelete={remove} />
+    </div>
+  );
 }
