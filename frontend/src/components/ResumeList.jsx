@@ -8,8 +8,8 @@ export default function ResumeList({ resumes, onDelete }) {
         <ul className="space-y-4">
           {resumes.map(r => (
             <li key={r.id} className="border rounded p-4 flex justify-between items-center">
-              <Link to={`/edit/${r.id}`} className="text-blue-600 font-semibold hover:underline">
-                {r.title}
+              <Link to={`/view/${r.id}`} className="text-blue-600 font-semibold hover:underline">
+                  {r.title}
               </Link>
               <button
                 onClick={() => onDelete(r.id)}
