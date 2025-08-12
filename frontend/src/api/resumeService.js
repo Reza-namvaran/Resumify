@@ -48,6 +48,15 @@ export async function createResume() {
   return res.json();
 }
 
+export async function createResumeFromJSON(data) {  
+  const res = await fetch(`${API_URL}/resumes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) return null;
+  return await res.json();
+}
 
 export async function updateResume(updated) {
   const res = await fetch(`${API_URL}/resumes/${updated.id}`, {
