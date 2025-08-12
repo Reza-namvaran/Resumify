@@ -4,6 +4,10 @@ import { useResumes } from "../hooks/useResumes";
 import ResumeList from "../components/ResumeList";
 import TypingText from "../components/TypingText";
 import ConfirmModal from "../components/ConfirmModal";
+import ImportResumeModal from "../components/ImportResumeModal";
+import * as resumeService from "../api/resumeService";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export default function HomePage() {
   const { resumes, create, remove } = useResumes();
@@ -11,6 +15,24 @@ export default function HomePage() {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedResumeId, setSelectedResumeId] = useState(null);
+
+  const [importOpen, setImportOpen] = useState(false);
+
+  const handleImport = async (jsonData) => {
+    try {
+      const newResume = {
+        ...jsonData,
+        id: crypto.randomUUID ? crypto.randomUUID() : uuidv4(),
+      };
+      const created = await resumeService.createResumeFromJSON(newResume);
+      if (created) {
+        window.location.reload();
+      }
+    } catch (error) {
+      alert("Failed to import resume: " + error.message);
+    }
+  };
+
 
   const handleCreate = async () => {
     const newResume = await create();
@@ -47,10 +69,15 @@ export default function HomePage() {
 
       <button
         onClick={handleCreate}
-        className="mb-10 px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-lg shadow-lg !transform !transition-transform duration-300 ease-in-out hover:scale-105 hover:!bg-gray-100 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-300"
+        className="mb-5 px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-lg shadow-lg !transform !transition-transform duration-300 ease-in-out hover:scale-105 hover:!bg-gray-100 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-300"
         aria-label="Create new resume"
       >
         + Create New Resume
+      </button>
+      <button
+            onClick={() => setImportOpen(true)}
+            className="mb-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 hover:!border-black !transform !transition-transform duration-300 ease-in-out hover:scale-105">
+            Import Resume (JSON)
       </button>
 
       {resumes.length === 0 ? (
@@ -90,6 +117,14 @@ export default function HomePage() {
       
     </main>
     </div>
+
+    <ImportResumeModal
+        isOpen={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImport={handleImport}
+      />
+
+
 
   <ConfirmModal
     isOpen={isModalOpen}
