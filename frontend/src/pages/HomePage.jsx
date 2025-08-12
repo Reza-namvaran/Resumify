@@ -1,27 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResumes } from "../hooks/useResumes";
 import ResumeList from "../components/ResumeList";
 import TypingText from "../components/TypingText";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function HomePage() {
   const { resumes, create, remove } = useResumes();
   const navigate = useNavigate();
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedResumeId, setSelectedResumeId] = useState(null);
 
   const handleCreate = async () => {
     const newResume = await create();
     navigate(`/edit/${newResume.id}`);
   };
 
+  const openDeleteModal =(id) => {
+    setSelectedResumeId(id);
+    setModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedResumeId) {
+      remove(selectedResumeId);
+      setModalOpen(false);
+      setSelectedResumeId(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setModalOpen(false);
+    setSelectedResumeId(null);
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex flex-col items-center p-8">
+    <>
+    <div className={`relative w-full h-full`}>
+    <div className={`fixed inset-0 transition ${isModalOpen ? 'backdrop-blur-sm bg-opacity-40 pointer-events-auto' : 'pointer-events-none'}`}
+      style={{ transition: 'backdrop-filter 0.3s ease, background-color 0.3s ease' }}></div>
+    <main className={`min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex flex-col items-center p-8 transition-all duration-300`}>
       <h1 className="text-5xl font-extrabold text-white mb-10 tracking-tight drop-shadow-lg">
         Your Resumes
       </h1>
 
       <button
         onClick={handleCreate}
-        className="mb-10 px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-lg shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-300"
+        className="mb-10 px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-lg shadow-lg !transform !transition-transform duration-300 ease-in-out hover:scale-105 hover:!bg-gray-100 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-green-300"
         aria-label="Create new resume"
       >
         + Create New Resume
@@ -51,9 +77,9 @@ export default function HomePage() {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  remove(resume.id);
+                  openDeleteModal(resume.id);
                 }}
-                className="mt-4 self-start bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+                className="mt-4 self-start !bg-rose-600 text-white px-3 py-1 rounded hover:!border-gray-100 hover:!bg-red-600 !transition !duration-300 !ease-in-out hover:scale-105" 
               >
                 Delete
               </button>
@@ -61,6 +87,17 @@ export default function HomePage() {
           ))}
         </section>
       )}
+      
     </main>
+    </div>
+
+  <ConfirmModal
+    isOpen={isModalOpen}
+    onConfirm={confirmDelete}
+    onCancel={cancelDelete}
+    title="Delete Resume"
+    message="Are you sure you want to delete this resume? This action cannot be undone."
+  />
+  </>
   );
 }
