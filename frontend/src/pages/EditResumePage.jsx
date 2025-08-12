@@ -143,7 +143,7 @@ export default function EditResumePage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="bg-white p-6 rounded-xl shadow-lg"
+        className="bg-white p-6 rounded-xl shadow-lg text-gray-700"
       >
         <SectionTitle icon={User}>Personal Info</SectionTitle>
         <Input
@@ -153,6 +153,7 @@ export default function EditResumePage() {
           onChange={(e) =>
             setResume({ ...resume, personalInfo: { ...resume.personalInfo, name: e.target.value } })
           }
+          className="!text-gray-700"
         />
         <Input
           label="Photo URL"

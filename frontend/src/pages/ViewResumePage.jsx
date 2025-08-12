@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import * as resumeService from "../api/resumeService";
+import { Mail, Phone, Github, Linkedin, Award, Briefcase, GraduationCap, Heart } from "lucide-react";
 
 export default function ViewResumePage() {
   const { id } = useParams();
@@ -17,79 +18,88 @@ export default function ViewResumePage() {
     });
   }, [id, navigate]);
 
-  if (!resume) return <p className="text-center mt-10">Loading...</p>;
+  if (!resume) {
+    return <p className="text-center mt-10 text-gray-500 animate-pulse">Loading resume...</p>;
+  }
 
   const { personalInfo, skills, education, experience, certificates, hobbies } = resume;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
+    <div className="max-w-4xl mx-auto p-6 mt-6 bg-gradient-to-br from-white to-gray-50 shadow-2xl rounded-2xl">
       {/* Personal Info */}
-      <div className="flex items-center gap-6 border-b pb-4 mb-4">
+      <div className="flex items-center gap-6 border-b pb-6 mb-8">
         {personalInfo.photo && (
           <img
             src={personalInfo.photo}
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border"
+            className="w-28 h-28 rounded-full object-cover border-4 border-indigo-500 shadow-lg"
           />
         )}
         <div>
-          <h1 className="text-3xl font-bold text-gray-600">{personalInfo.name || "Unnamed"}</h1>
-          <p className="text-gray-600">{personalInfo.jobTitle}</p>
-          <p className="mt-2 text-gray-600">{personalInfo.bio}</p>
-          <div className="mt-2 text-sm text-gray-500 space-x-4">
-            {personalInfo.contact.email && <span>📧 {personalInfo.contact.email}</span>}
-            {personalInfo.contact.phone && <span>📱 {personalInfo.contact.phone}</span>}
+          <h1 className="text-4xl font-extrabold text-gray-800">{personalInfo.name || "Unnamed"}</h1>
+          <p className="text-lg text-indigo-600 font-medium">{personalInfo.jobTitle}</p>
+          <p className="mt-2 text-gray-600 italic">{personalInfo.bio}</p>
+          <div className="mt-3 flex flex-wrap gap-4 text-sm text-gray-500">
+            {personalInfo.contact.email && (
+              <span className="flex items-center gap-1"><Mail size={16} /> {personalInfo.contact.email}</span>
+            )}
+            {personalInfo.contact.phone && (
+              <span className="flex items-center gap-1"><Phone size={16} /> {personalInfo.contact.phone}</span>
+            )}
             {personalInfo.contact.github && (
-              <a href={personalInfo.contact.github} className="text-blue-600" target="_blank" rel="noreferrer">GitHub</a>
+              <a href={personalInfo.contact.github} className="flex items-center gap-1 text-indigo-600 hover:underline" target="_blank" rel="noreferrer">
+                <Github size={16} /> GitHub
+              </a>
             )}
             {personalInfo.contact.linkedin && (
-              <a href={personalInfo.contact.linkedin} className="text-blue-600" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href={personalInfo.contact.linkedin} className="flex items-center gap-1 text-indigo-600 hover:underline" target="_blank" rel="noreferrer">
+                <Linkedin size={16} /> LinkedIn
+              </a>
             )}
           </div>
         </div>
       </div>
 
       {/* Skills */}
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-gray-600">Skills</h2>
+      <Section title="Skills">
         {skills.length === 0 ? (
-          <p className="text-gray-500">No skills listed.</p>
+          <EmptyText>No skills listed.</EmptyText>
         ) : (
-          <ul className="list-disc pl-5 text-gray-600">
+          <div className="flex flex-wrap gap-2">
             {skills.map((s, i) => (
-              <li key={i}>{s.name} {s.level && `- ${s.level}`}</li>
+              <span key={i} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm shadow-sm">
+                {s.name} {s.level && `- ${s.level}`}
+              </span>
             ))}
-          </ul>
+          </div>
         )}
-      </section>
+      </Section>
 
       {/* Education */}
-      <section className="mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-gray-600">Education</h2>
+      <Section title="Education" icon={<GraduationCap size={20} />}>
         {education.length === 0 ? (
-          <p className="text-gray-500">No education history.</p>
+          <EmptyText>No education history.</EmptyText>
         ) : (
           education.map((edu, i) => (
-            <div key={i} className="mb-3">
-              <p className="font-semibold text-gray-600">{edu.school}</p>
+            <div key={i} className="mb-4 border-l-4 border-indigo-400 pl-3">
+              <p className="font-bold text-gray-800">{edu.school}</p>
               <p className="text-sm text-gray-600">{edu.major} ({edu.start} - {edu.end})</p>
-              <p className="text-gray-600">{edu.description}</p>
+              <p className="text-gray-500">{edu.description}</p>
             </div>
           ))
         )}
-      </section>
+      </Section>
 
       {/* Experience */}
-      <section className="mb-6 text-gray-600">
-        <h2 className="text-xl font-semibold mb-2">Experience / Projects</h2>
+      <Section title="Experience / Projects" icon={<Briefcase size={20} />}>
         {experience.length === 0 ? (
-          <p className="text-gray-500">No experience listed.</p>
+          <EmptyText>No experience listed.</EmptyText>
         ) : (
           experience.map((exp, i) => (
-            <div key={i} className="mb-3">
-              <p className="font-semibold">{exp.organization}</p>
-              <p className="text-sm">{exp.role} ({exp.start} - {exp.end})</p>
-              <ul className="list-disc pl-5 text-gray-600">
+            <div key={i} className="mb-4">
+              <p className="font-bold text-gray-800">{exp.organization}</p>
+              <p className="text-sm text-gray-600">{exp.role} ({exp.start} - {exp.end})</p>
+              <ul className="list-disc pl-5 text-gray-600 mt-1">
                 {exp.achievements?.map((ach, idx) => (
                   <li key={idx}>{ach}</li>
                 ))}
@@ -97,49 +107,66 @@ export default function ViewResumePage() {
             </div>
           ))
         )}
-      </section>
+      </Section>
 
       {/* Certificates */}
-      <section className="mb-6 text-gray-600">
-        <h2 className="text-xl font-semibold mb-2">Certificates</h2>
+      <Section title="Certificates" icon={<Award size={20} />}>
         {certificates.length === 0 ? (
-          <p className="text-gray-500">No certificates listed.</p>
+          <EmptyText>No certificates listed.</EmptyText>
         ) : (
           certificates.map((cert, i) => (
-            <div key={i} className="mb-2">
-              <p className="font-semibold">{cert.name}</p>
-              <p className="text-sm">{cert.issuer} - {cert.date}</p>
+            <div key={i} className="mb-3">
+              <p className="font-bold text-gray-800">{cert.name}</p>
+              <p className="text-sm text-gray-600">{cert.issuer} - {cert.date}</p>
               {cert.link && (
-                <a href={cert.link} target="_blank" rel="noreferrer" className="text-blue-600">
+                <a href={cert.link} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">
                   View Certificate
                 </a>
               )}
             </div>
           ))
         )}
-      </section>
+      </Section>
 
       {/* Hobbies */}
-      <section className="text-gray-600">
-        <h2 className="text-xl font-semibold mb-2">Hobbies / Interests</h2>
+      <Section title="Hobbies / Interests" icon={<Heart size={20} />}>
         {hobbies.length === 0 ? (
-          <p className="text-gray-500">No hobbies listed.</p>
+          <EmptyText>No hobbies listed.</EmptyText>
         ) : (
-          <ul className="list-disc pl-5">
+          <ul className="list-disc pl-5 text-gray-600">
             {hobbies.map((h, i) => (
               <li key={i}>{h}</li>
             ))}
           </ul>
         )}
-      </section>
+      </Section>
 
-      {/* Back & Edit */}
-      <div className="mt-6 flex gap-4">
-        <Link to="/" className="px-4 py-2 bg-gray-300 !text-gray-800 rounded !hover:bg-gray-400">Back</Link>
-        <Link to={`/edit/${id}`} className="px-4 py-2 bg-blue-600 !text-white rounded !hover:bg-blue-700">
+      {/* Actions */}
+      <div className="mt-8 flex gap-4">
+        <Link to="/" className="px-5 py-2 bg-gray-200 !text-gray-800 rounded-lg hover:bg-gray-300 !transition !duration-200 !ease-in-out hover:scale-105">
+          Back
+        </Link>
+        <Link to={`/edit/${id}`} className="px-5 py-2 bg-indigo-600 !text-white rounded-lg shadow hover:bg-indigo-700 !transition !duration-200 !ease-in-out hover:scale-105">
           Edit Resume
         </Link>
       </div>
     </div>
   );
+}
+
+/* Reusable section component */
+function Section({ title, children, icon }) {
+  return (
+    <section className="mb-8">
+      <h2 className="flex items-center gap-2 text-xl font-semibold text-gray-700 border-b pb-2 mb-3">
+        {icon && <span className="text-indigo-500">{icon}</span>}
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function EmptyText({ children }) {
+  return <p className="text-gray-500 italic">{children}</p>;
 }

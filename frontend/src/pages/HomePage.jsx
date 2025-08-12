@@ -42,7 +42,7 @@ export default function HomePage() {
       style={{ transition: 'backdrop-filter 0.3s ease, background-color 0.3s ease' }}></div>
     <main className={`min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex flex-col items-center p-8 transition-all duration-300`}>
       <h1 className="text-5xl font-extrabold text-white mb-10 tracking-tight drop-shadow-lg">
-        Your Resumes
+        Resumify
       </h1>
 
       <button
