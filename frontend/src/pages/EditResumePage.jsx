@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as resumeService from "../api/resumeService";
 import { motion } from "framer-motion";
-import { User, Briefcase, GraduationCap, Award, Heart, Phone, Mail } from "lucide-react";
+import { User, Briefcase, GraduationCap, Award, Heart, Phone, Mail, Trash2 } from "lucide-react";
 
 function SectionTitle({ icon: Icon, children }) {
   return (
@@ -60,16 +60,16 @@ function ListEditor({ title, items, onChange, fields, icon }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mb-8 bg-white p-6 rounded-xl shadow hover:shadow-lg transition-shadow"
+      className="mb-8 !bg-white p-6 rounded-xl shadow hover:shadow-lg transition-shadow"
     >
       <SectionTitle icon={icon}>{title}</SectionTitle>
       {items.length === 0 && (
-        <p className="mb-4 text-gray-500 italic">No {title.toLowerCase()} added yet.</p>
+        <p className="mb-4 !text-gray-500 italic">No {title.toLowerCase()} added yet.</p>
       )}
       {items.map((item, idx) => (
         <div
           key={idx}
-          className="p-4 border border-gray-200 rounded-lg mb-4 bg-gray-50 hover:bg-white transition relative"
+          className="p-4 border !text-gray-700 !border-gray-200 rounded-lg mb-4 !bg-gray-50 hover:!bg-white transition relative"
         >
           {fields.map(({ name, placeholder }) => (
             <Input
@@ -82,15 +82,15 @@ function ListEditor({ title, items, onChange, fields, icon }) {
           ))}
           <button
             onClick={() => removeItem(idx)}
-            className="absolute top-3 right-3 text-red-500 hover:text-red-700 text-xl font-bold"
+            className="absolute !py-1 !px-3 top-1 right-2 !bg-white !border-black !text-black hover:!bg-rose-600 hover:!border-white hover:!text-white text-xl font-bold"
           >
-            &times;
+            <Trash2 />
           </button>
         </div>
       ))}
       <button
         onClick={addItem}
-        className="mt-2 bg-indigo-600 text-white px-5 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+        className="mt-2 !bg-indigo-600 !text-white px-5 py-2 rounded-lg shadow hover:!bg-indigo-700 !transition duration-300 !ease-in-out hover:scale-105"
       >
         + Add {title}
       </button>
@@ -241,6 +241,7 @@ export default function EditResumePage() {
 
       <ListEditor
         title="Certificates"
+        className="!text-gray-700"
         items={resume.certificates}
         onChange={(val) => setResume({ ...resume, certificates: val })}
         fields={[
@@ -267,7 +268,7 @@ export default function EditResumePage() {
             <div key={idx} className="flex items-center gap-3">
               <input
                 type="text"
-                className="flex-grow border p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                className="flex-grow border p-3 !text-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                 value={hobby}
                 onChange={(e) => {
                   const newHobbies = [...resume.hobbies];
@@ -291,7 +292,7 @@ export default function EditResumePage() {
           ))}
           <button
             onClick={() => setResume({ ...resume, hobbies: [...resume.hobbies, ""] })}
-            className="bg-indigo-600 text-white px-5 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+            className="!bg-indigo-600 !text-white px-5 py-2 rounded-lg shadow hover:!bg-indigo-700 !transition duration-300 !ease-in-out hover:scale-102"
           >
             + Add Hobby / Interest
           </button>
@@ -302,13 +303,13 @@ export default function EditResumePage() {
       <div className="sticky bottom-4 flex justify-end gap-4 bg-white p-4 rounded-xl shadow-lg border">
         <button
           onClick={() => navigate("/")}
-          className="px-6 py-3 bg-gray-200 rounded-lg shadow hover:bg-gray-300 transition"
+          className="px-6 py-3 !bg-gray-200 hover:!border-gray-300 !text-gray-900 rounded-lg shadow hover:!bg-gray-300 !transition duration-300 !ease-in-out hover:scale-105"
         >
           Cancel
         </button>
         <button
           onClick={handleSave}
-          className="px-6 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
+          className="px-6 py-3 !bg-green-600 text-white rounded-lg shadow hover:!bg-green-700 hover:!border-green-700 !transition duration-300 !ease-in-out hover:scale-105"
         >
           Save Resume
         </button>
