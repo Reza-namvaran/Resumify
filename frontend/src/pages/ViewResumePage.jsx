@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import * as resumeService from "../api/resumeService";
 import { Mail, Phone, Github, Linkedin, Award, Briefcase, GraduationCap, Heart } from "lucide-react";
+import ResumePDFDocument from "../components/ResumePDFDocument";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 export default function ViewResumePage() {
   const { id } = useParams();
@@ -149,6 +151,16 @@ export default function ViewResumePage() {
         <Link to={`/edit/${id}`} className="px-5 py-2 bg-indigo-600 !text-white rounded-lg shadow hover:bg-indigo-700 !transition !duration-200 !ease-in-out hover:scale-105">
           Edit Resume
         </Link>
+
+        <PDFDownloadLink
+          document={<ResumePDFDocument resume={resume} />}
+          fileName={`${personalInfo.name || "resume"}.pdf`}
+          className="px-5 py-2 bg-rose-700 !text-white rounded-lg shadow hover:bg-rose-800 transition duration-200 ease-in-out hover:scale-105 flex items-center justify-center"
+        >
+          {({ loading }) => (loading ? "Preparing PDF..." : "Export as PDF")}
+        </PDFDownloadLink>
+
+
       </div>
     </div>
   );
