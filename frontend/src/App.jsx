@@ -5,7 +5,7 @@ import ViewResumePage from "./pages/ViewResumePage.jsx";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Resumify">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/edit/:id" element={<EditResumePage />} />
